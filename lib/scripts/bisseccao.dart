@@ -1,12 +1,28 @@
 import 'dart:math';
+import 'package:math_expressions/math_expressions.dart';
 
 class Bisseccao {
   static double CalcularXk(double a, double b) {
     return (a + b) / 2;
   }
 
-  static double CalcularF_Xk(double xk) {
-    return cos(pi * (xk + 1) / 8) - (0.148 * xk) - 0.9062;
+  static double CalcularF_Xk(double xk,String equacao) {
+    String equacao2 = equacao.replaceAll(new RegExp('x'), '${xk}'); // 'résumé'
+    print(equacao2);
+    Parser p = new Parser();
+    //cos(pi * (xk + 1) / 8) - (0.148 * xk) - 0.9062;
+    //"cos(pi*x+1)"
+    Expression exp = p.parse(equacao);
+    Variable x = new Variable('x');
+    ContextModel cm = new ContextModel();
+    cm.bindVariable(x, new Number(xk));
+    double resultado = exp.evaluate(EvaluationType.REAL, cm);
+
+    print("aqui calcula" + exp.simplify().toString());
+    print("aqui resultado" + resultado.toString());
+    return  resultado;
+//    return  cos(pi * (xk + 1) / 8) - (0.148 * xk) - 0.9062;
+
   }
 
   static double CalcularErro(double a, double b) {
@@ -17,14 +33,16 @@ class Bisseccao {
     return (denominador) / a;
   }
 
-  static List<String> CalcularApeoximacao1(double a, double b, double precisao, int parada) {
+  static List<String> CalcularApeoximacao1(double a, double b, double precisao, int parada, String equacao) {
     List<String> resultados = [];
-    double xk, y, erro = 1;
+    double xk, erro = 1;
+    double y;
     for (int i = 0; i < parada; i++) {
       xk = CalcularXk(a, b);
-      y = CalcularF_Xk(xk);
+      y = CalcularF_Xk(xk,equacao);
       if (i != 1) erro = CalcularErro(a, b);
-      resultados.add("$i, $a, $b, $xk, $erro, ${y.toString().substring(0, 5)}");
+      resultados.add("k=$i, a=$a, b=$b, Xk=$xk, e=$erro, f(Xk)=${y.toString().substring(0, 5)}");
+      print("teste" + y.toString());
       print("$i, $a, $b, $xk, $erro, ${y.toString().substring(0, 5)}");
       if (erro < precisao) {
         resultados.add("A Raiz = " + xk.toString().substring(0, 5));

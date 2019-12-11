@@ -32,6 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _equacao = new TextEditingController(text: 'x-cos(x)');
     _pontoA = new TextEditingController(text: '-1');
     _pontoB = new TextEditingController(text: '0');
     _precisao = new TextEditingController(text: '0.01');
@@ -42,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cálculo Numérico"),
+        title: Text("Metodo da Bissecção"),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -63,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue, width: 2.0),
                           ),
-                          hintText: 'cos(pi*(xk+1)/8)-(0.148*xk)-0.9062'),
+                          hintText: 'equaçao'),
                     )),
               ],
             ),
@@ -164,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 double raiz;
                 int parada = int.parse(_parada.text);
                 setState(() {
-                  resultados = Bisseccao.CalcularApeoximacao1(a, b, precisao, parada);
+                  resultados = Bisseccao.CalcularApeoximacao1(a, b, precisao, parada, _equacao.text);
                 });
               },
               icon: Icon(
